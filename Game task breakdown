@@ -2,5 +2,11 @@
   a. Start the game
   b. End Game
 2. Tank(Self&Enemy):
-  a. move
-  b. attack
+  a. Move
+  b. Attack
+3. Bullet:
+  a. Move 
+4. Obstacle:
+  a. Block
+  b. Destroyed
+5. BGM:
