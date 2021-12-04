@@ -26,8 +26,13 @@ class MainGame():
     def __init__(self):
         pass
     def startgame(self):
-        pass
+          MainGame.window = pygame.display.set_mode([MainGame.SCREEN_WIDTH,MainGame.SCREEN_HEIGHT])
+        pygame.display.set_caption("Bettle Tank V 1.0")
+        while True:
+            pygame.display.update()
+            MainGame.window.fill(color_display)
     def endgame(self):
+         print("Thanks for Playing")
         exit()
 class tank()
     def __init__(self):
@@ -61,3 +66,4 @@ class wall(self):
         pass
     def displaywall(self):
         pass
+MainGame().startgame()
