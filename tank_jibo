@@ -1,5 +1,7 @@
 import  pygame, time, random
 import self as self
+color_display = pygame.Color(0,0,0)
+color_text = pygame.Color(255,0,0)
 
 
 class MainGame():
@@ -28,12 +30,55 @@ class MainGame():
     def startgame(self):
           MainGame.window = pygame.display.set_mode([MainGame.SCREEN_WIDTH,MainGame.SCREEN_HEIGHT])
         pygame.display.set_caption("Bettle Tank V 1.0")
+        
+        
         while True:
             pygame.display.update()
             MainGame.window.fill(color_display)
+            MainGame.window.blit(self.Text1("left 5 enermy tank"),(5,5))
+            MainGame.window.blit(self.Text2("user manual"), (1400,5))
+            self.getevent()
+            
+            
+            
+            
     def endgame(self):
          print("Thanks for Playing")
         exit()
+    #get event from mouse and keyboard
+    def getevent(self):
+        eventlist = pygame.event.get()
+        for event in eventlist :
+            if event.type == pygame.QUIT:
+                self.endgame()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    print("go left")
+                elif event.key == pygame.K_RIGHT:
+                     pass
+                elif event . key== pygame.K_UP:
+                    pass
+
+                elif event.key == pygame.K_DOWN:
+                    pass
+
+                elif event.key == pygame.K_SPACE:
+                    pass
+     #show text on the window
+     def Text1(self, word):
+        pygame.font.init()
+        #textlist = pygame.font.get_fonts()
+        text = pygame.font.SysFont('arial' , 20)
+        textsurf1 = text.render(word,True,color_text)
+        return textsurf1
+        
+    def Text2(self, word):
+        pygame.font.init()
+        #textlist = pygame.font.get_fonts()
+        text = pygame.font.SysFont('arial' , 20)
+        textsurf2 = text.render(word,True,color_text)
+        return textsurf2
+  
 class tank()
     def __init__(self):
         pass
