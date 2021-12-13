@@ -10,3 +10,6 @@ class enemytank(tank):
       'L': pygame.image.load('')'
       'R': pygame.image.load('')'
     }
+    self.direction = 'D'
+    self.picture = self.pictures[self.direction]
+    self.rect = self.get_rect()
