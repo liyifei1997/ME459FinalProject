@@ -13,3 +13,5 @@ class ourtank():
     }
     self.picture = self.pictures[self.direction]
     self.rect = self.picture.get_rect()      #Rect  
+    self.rect.left = left
+    self.rect.top = top
