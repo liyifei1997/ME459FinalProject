@@ -5,7 +5,7 @@ class ourtank():
       'U':pygame.image.load(''),
       'D':pygame.image.load(''),
       'L':pygame.image.load(''),
-      'R':pygame.image.load(''),
-      
+      'R':pygame.image.load(''),  
     }
     self.picture = self.pictures[self.direction]
+    self.rect = self.picture.get_rect()      #Rect  
