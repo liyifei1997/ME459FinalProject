@@ -1,3 +1,7 @@
+import time
+import random
+import pygame
+
 class ourtank():
   def __init__(self,leftborder,topborder):   #Our tank coordinates
     self.direction = 'U'                     #Up Down Left Right
