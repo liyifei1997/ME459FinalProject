@@ -22,3 +22,4 @@ class ammo():
     self.speed = 8
   def move(self):
   def displayammo(self):
+    MainGame.window.blit(self.image,self.rect)
