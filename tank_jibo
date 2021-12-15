@@ -18,9 +18,9 @@ class MainGame():
     # create amount of enemy's tank
     EnemyTank_count = 5
     # list to store our tank's ammo
-    Bullet_list = []
+    Ammo_list = []
     # list to store enemy's tank's ammo
-    Enemy_bullet_list = []
+    Enemy_Ammo_list = []
     # list to store the effect of the explode
     Explode_list = []
     # list of wall
@@ -74,7 +74,9 @@ class MainGame():
                     MainGame.TANK_P1.move()
 
                 elif event.key == pygame.K_SPACE:
-                    pass
+                    print("fire")
+                    a = ammo(MAinGame.TANK_P1)
+                    MainGame.Ammo_list.append(m)
                     
      #show text on the window
      def Text1(self, word):
@@ -116,7 +118,7 @@ class tank():
         elif self.direction == 'D'
             self.rect.top = self.rect.top + self.speed
     def fire(self):
-        pass
+        return ammo(self)
     def displaytank(self):
         self.image = self.images[self.direction]
 class ourtank(tank):
