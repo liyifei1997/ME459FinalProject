@@ -13,6 +13,10 @@ class enemytank(tank):
     self.direction = self.randomdirection()
     self.picture = self.pictures[self.direction]
     self.rect = self.get_rect()
+    self.rect.left = left
+    self.rect.top = top
+    self.speed = speed
+    self.stop = True
   def randomdirection(self):
     number = random.randint(1,4)
     if number == 1:
@@ -23,4 +27,5 @@ class enemytank(tank):
       self.direction = 'L'
     elif number ==4:
       self.direction = 'R'
-    return
+  def displayenemytank(self):
+    super().displaytank()
