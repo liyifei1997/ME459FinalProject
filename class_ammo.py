@@ -44,3 +44,16 @@ class ammo():
         self.live = False
   def displayammo(self):
     MainGame.window.blit(self.image,self.rect)
+  def hitenemytank(self):
+    for enemytank in MainGame.EnemyTank_list:
+      if pygame.sprite.collide_rect(enemytank,self):
+        explode = Explode(enemytank)
+        MainGame.Expolde_list.append(explode)
+        self.live = False
+        enemy.live = False
+    def hitourtank(self):
+      if pygame.sprite.collide_rect(self,MainGame.TANK_P1):
+        explode = Explode(MainGame.TANK_P1)
+        MainGame.Explode_list.append(explode)
+        self.live = False
+        MainGame.TANK_P1.live = False
