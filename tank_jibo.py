@@ -1,11 +1,12 @@
-import  pygame, time, random
+import pygame, time, random
 import self as self
-color_display = pygame.Color(0,0,0)
-color_text = pygame.Color(255,0,0)
+
+color_display = pygame.Color(0, 0, 0)
+color_text = pygame.Color(255, 0, 0)
 
 
 class MainGame():
-    #create the window of the game
+    # create the window of the game
     window = None
     SCREEN_WIDTH = 1600
     SCREEN_HEIGHT = 900
@@ -18,130 +19,110 @@ class MainGame():
     # create amount of enemy's tank
     EnemyTank_count = 5
     # list to store our tank's ammo
-    Ammo_list = []
+    Bullet_list = []
     # list to store enemy's tank's ammo
-    Enemy_Ammo_list = []
+    Enemy_bullet_list = []
     # list to store the effect of the explode
     Explode_list = []
     # list of wall
     Wall_list = []
+
     def __init__(self):
         pass
-    def startgame(self):
-          MainGame.window = pygame.display.set_mode([MainGame.SCREEN_WIDTH,MainGame.SCREEN_HEIGHT])
-        pygame.display.set_caption("Bettle Tank V 1.0")
+
+    def startgame(self, Tank_p1=None):
+        MainGame.window = pygame.display.set_mode([MainGame.SCREEN_WIDTH, MainGame.SCREEN_HEIGHT])
+        pygame.display.set_caption("bettle tank")
         MainGame.TANK_P1=Tank(500,500)
-        
-        
         while True:
             pygame.display.update()
             MainGame.window.fill(color_display)
-           
-            MainGame.window.blit(self.Text2("user manual"), (1400,5))
+
+            MainGame.window.blit(self.Text2("user manual"), (1400, 5))
             self.getevent()
-             MainGame.window.blit(self.Text1("left 5 enermy tank"),(5,5))
-             MainGame.TANK_P1.display()
-             pygame.display.update()
-            
-            
-            
-    def endgame(self):
-         print("Thanks for Playing")
-        exit()
-    #get event from mouse and keyboard
+            MainGame.window.blit(self.Text1("left 5 enermy tank"), (5, 5))
+            MainGame.TANK_P1.display()
+            if MainGame.TANK_P1 and not MainGame.Tank_p1.stop
+                MainGame.TANK_P1.move()
+            pygame.display.update()
+            time.sleep(0.02)
+
     def getevent(self):
         eventlist = pygame.event.get()
-        for event in eventlist :
+        for event in eventlist:
             if event.type == pygame.QUIT:
                 self.endgame()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     print("go left")
                     MainGame.TANK_P1.direction = 'L'
-                    MainGame.TANK_P1.move()
+                    MainGame.TANK_P1.stop = False
                 elif event.key == pygame.K_RIGHT:
-                     print("go right")
+                    print("go right")
                     MainGame.TANK_P1.direction = 'R'
-                    MainGame.TANK_P1.move()
-                elif event . key== pygame.K_UP:
+                    MainGame.TANK_P1.stop = False
+                elif event.key == pygame.K_UP:
                     print("go up")
                     MainGame.TANK_P1.direction = 'U'
-                    MainGame.TANK_P1.move()
+                    MainGame.TANK_P1.stop = False
 
                 elif event.key == pygame.K_DOWN:
                     print("go down")
                     MainGame.TANK_P1.direction = 'D'
-                    MainGame.TANK_P1.move()
+                    MainGame.TANK_P1.stop = False
 
                 elif event.key == pygame.K_SPACE:
-                    print("fire")
-                    a = ammo(MAinGame.TANK_P1)
-                    MainGame.Ammo_list.append(m)
-                    
-     #show text on the window
-     def Text1(self, word):
+                    pass
+            if event.type == pygame.KEYUP and event.key == pygame.K_LEFT or pygame.K_RIGHT or pygame.K_DOWN or  pygame.K_DOWN
+                MainGame.TANK_P1.stop = True
+    def Text1(self, word):
         pygame.font.init()
-        #textlist = pygame.font.get_fonts()
-        text = pygame.font.SysFont('arial' , 20)
-        textsurf1 = text.render(word,True,color_text)
+        # textlist = pygame.font.get_fonts()
+        text = pygame.font.SysFont('arial', 20)
+        textsurf1 = text.render(word, True, color_text)
         return textsurf1
-        
+
     def Text2(self, word):
         pygame.font.init()
-        #textlist = pygame.font.get_fonts()
-        text = pygame.font.SysFont('arial' , 20)
-        textsurf2 = text.render(word,True,color_text)
+        # textlist = pygame.font.get_fonts()
+        text = pygame.font.SysFont('arial', 20)
+        textsurf2 = text.render(word, True, color_text)
         return textsurf2
-  
-class tank():
-  def __init__(self,leftborder,topborder):   #Our tank coordinates
-    self.direction = 'U'                     #Up Down Left Right
-    self.pictures = {                        #load pictures
-      'U':pygame.image.load(''),
-      'D':pygame.image.load(''),
-      'L':pygame.image.load(''),
-      'R':pygame.image.load(''),  
-    }
-    self.picture = self.pictures[self.direction]
-    self.rect = self.picture.get_rect()      #Rect  
-    self.rect.left = left
-    self.rect.top = top
-    self.speed = 5
-    
-    def move(self):
-         if self.direction == 'L'
-            self.rect.left = self.rect.left - self.speed
-        elif self.direction == 'R'
-            self.rect.left = self.rect.left + self.speed
-        elif self.direction == 'U'
-            self.rect top = self.rect.top - self.speed
-        elif self.direction == 'D'
-            self.rect.top = self.rect.top + self.speed
-    def fire(self):
-        return ammo(self)
-    def displaytank(self):
+
+    def endgame(self):
+        print("Thanks for Playing")
+        # end the game
+        exit()
+
+
+class Tank():
+    def __init__(self,left,top):
+        self.images = {'U': pygame.image.load(),'D':pygame.image.load(),'L':pygame.image.load(),'R':pygame.image.load()}
+        self.direction = 'U'
         self.image = self.images[self.direction]
-class ourtank(tank):
-    def __init__(self):
-        pass
-class enemytank(tank):
-    def __init__(self):
-        pass
-class ammo(self):
-    def __init__(self):
-        pass
+        self.rect.left = left
+        self.rect.top = top
+        self.speed = 5
+        self.stop =True
     def move(self):
+        if self.direction == 'L'
+            if self.rect.left>0
+                self.rect.left = self.rect.left - self.speed
+        elif self.direction == 'R'
+            if self.rect.left+self.rect.height< MainGame.SCREEN_WIDTH
+                self.rect.left = self.rect.left + self.speed
+        elif self.direction == 'U'
+            if self.rect.top>0
+                self.rect.top = self.rect.top - self.speed
+        elif self.direction == 'D'
+            if self.rect.top+self.rect.height < MainGame.SCREEN_HEIGHT
+                self.rect.top = self.rect.top + self.speed
+    def fire(self):
         pass
-    def displayammo(self):
-        pass
-class explode(self):
-    def __init__(self):
-        pass
-    def displayexplode(self):
-        pass
-class wall(self):
-    def __init__(self):
-        pass
-    def displaywall(self):
-        pass
+    def display(self):
+        self.image = self.images[self.direction]
+        MainGame.window.blit(self.image,self.rect)
+
+
+
 MainGame().startgame()
