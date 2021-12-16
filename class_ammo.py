@@ -57,3 +57,10 @@ class ammo():
         MainGame.Explode_list.append(explode)
         self.live = False
         MainGame.TANK_P1.live = False
+  def hitstell(self):
+    for wall in MainGame.Wall_list:
+      if pygame.sprite.collide_rect(wall,self):
+        self.live = False
+        wall.hp -= 1
+        if wall.hp <= 0:
+          wall.live = False
