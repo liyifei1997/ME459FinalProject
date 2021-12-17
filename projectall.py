@@ -21,9 +21,9 @@ class MainGame():
     # create amount of enemy's tank
     enemytank_count = 5
     # list to store our tank's ammo
-    bullet_list = []
+    ammo_list = []
     # list to store enemy's tank's ammo
-    Enemy_bullet_list = []
+    enemy_ammo_list = []
     # list to store the effect of the explode
     Explode_list = []
     # list of wall
@@ -58,15 +58,15 @@ class MainGame():
             if MainGame.TANK_P1 and not MainGame.TANK_P1 == True:
                 MainGame.TANK_P1.move()
             # when tanks hit wall
-            MainGame.TANK_P1.hitsteels()
+            MainGame.TANK_P1.hitsteel()
             # when tank hits tank
-            MainGame.TANK_P1.hitEnemyTank()
+            MainGame.TANK_P1.hitenemytank()
             # show wall
             self.showsteel()
             # use our tank bullet list
-            self.showbullet()
+            self.showammo()
             # use enemy tank bullet list
-            self.showenemybullet()
+            self.showenemyammo()
             # show exlodsion
             self.showexplodes()
             pygame.display.update()
@@ -152,12 +152,12 @@ class MainGame():
                 enemyammo = enemytank.shot()
                 if enemyammo:
                     # enemy tank ammo
-                    MainGame.Enemy_bullet_list.append(enemyammo)
+                    MainGame.enemy_ammo_list.append(enemyammo)
             else:
                 MainGame.enemytank_list.remove(enemytank)
     # create our tank
-    def blitBullet(self):
-        for bullet in MainGame.Bullet_list:
+    def showammo(self):
+        for bullet in MainGame.ammo_list:
             if bullet.live == True:
                 bullet.displayBullet()
                 # ammo move
@@ -167,27 +167,27 @@ class MainGame():
                 # oure ammo hit tank
                 bullet.hitWalls()
             else:
-                MainGame.Bullet_list.remove(bullet)
+                MainGame.ammo_list.remove(bullet)
 
     # enemy tank ammo
-    def blitEnemyBullet(self):
-        for eBullet in MainGame.Enemy_bullet_list:
-            if eBullet.live:
-                eBullet.displayBullet()
+    def showenemyammo(self):
+        for enemyammo in MainGame.enemy_ammo_list:
+            if enemyammo.live:
+                enemyammo.displayammo()
                 # ammo move
-                eBullet.bulletMove()
+                enemyammo.ammomove()
                 # ammo hit
-                eBullet.hitWalls()
+                enemyammo.hitsteel()
                 if MainGame.TANK_P1 and MainGame.TANK_P1.live:
                     # enemy tank ammo hit
-                    eBullet.hitMyTank()
+                    enemyammo.hitourtank()
             else:
-                MainGame.Enemy_bullet_list.remove(eBullet)
+                MainGame.enemy_ammo_list.remove(enemyammo)
     def endgame(self):
         print("Thanks for Playing")
         # end the game
         exit()
-    def displayExplodes(self):
+    def showexplodes(self):
         for explode in MainGame.Explode_list:
             if explode.live:
                 explode.displayExplode()
@@ -318,12 +318,26 @@ class ourtank(tank):
         for eTank in MainGame.enemytank_list:
             if pygame.sprite.collide_rect(eTank, self):
                 self.stay()
-
+  def hitsteel(self):
+    for steelwall in MainGame.steel_list:
+      if pygame.sprite.collide_rect(steelwall,self):
+        self.live = False
+        steelwall.hp -= 1
+        if steelwall.hp <= 0:
+          steelwall.live = False
+  def hitenemytank(self):
+    for enemytank in MainGame.enemytank_list:
+      if pygame.sprite.collide_rect(enemytank,self):
+        explode = explode(enemytank)
+        MainGame.Expolde_list.append(explode)
+        self.live = False
+        enemytank.live = False
 class ammo():
   def __init__(self,tank):
     self.live = True
     self.picture = pygame.image.load('img/ammo.gif')
     self.direction = tank.direction
+    self.rect = self.picture.get_rect()
     if self.direction == 'U':
       self.rect.left = tank.rect.left + tank.rect.width/2 - self.rect.width/2
       self.rect.top = tank.rect.top - self.rect.top
@@ -336,7 +350,6 @@ class ammo():
     elif self.direction == 'R':
       self.rect.left = tank.rect.left + tank.rect.width
       self.rect.top = tank.rect.top + tank.rect.width/2 - self.rect.width/2
-    self.rect = self.picture.get_rect()
     self.speed = 8
   def ammomove(self):
     if self.direction == 'U':
@@ -382,6 +395,12 @@ class ammo():
         if steelwall.hp <= 0:
           steelwall.live = False
 
+  def hitourtank(self):
+      if pygame.sprite.collide_rect(self, MainGame.TANK_P1):
+          explode = explode(MainGame.TANK_P1)
+          MainGame.Explode_list.append(explode)
+          self.live = False
+          MainGame.TANK_P1.live = False
 
 
 class explode():
