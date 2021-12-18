@@ -25,7 +25,7 @@ class MainGame():
     # list to store enemy's tank's ammo
     enemy_ammo_list = []
     # list to store the effect of the explode
-    Explode_list = []
+    explode_list = []
     # list of wall
     steel_list = []
 
@@ -118,14 +118,16 @@ class MainGame():
         # create our tank
         MainGame.TANK_P1 = ourtank(400, 300)
 
+
     def enemytank(self):
         top = 100
         for i in range(MainGame.enemytank_count):
             # tank move speed
             speed = random.randint(3, 6)
             left = random.randint(1, 7)
-            eTank = enemytank(left * 100, top, speed)
-            MainGame.enemytank_list.append(eTank)
+            enemytanks = enemytank(left * 100, top, speed)
+            MainGame.enemytank_list.append(enemytanks)
+    # create steel
     def createsteel(self):
         for i in range(1, 7):
             steelwall = steel(120 * i, 240)
@@ -139,35 +141,35 @@ class MainGame():
                 MainGame.steel_list.remove(steelwall)
     # create enemy tank
     def showenemytank(self):
-        for enemytank in MainGame.enemytank_list:
-            if enemytank.live:
-                enemytank.displayTank()
+        for enemytanks in MainGame.enemytank_list:
+            if enemytanks.live:
+                enemytanks.displayTank()
                 # enemy tank move
-                enemytank.randommove()
+                enemytanks.randommove()
                 # enemy tank  hit steel
-                enemytank.hitsteel()
+                enemytanks.hitsteel()
                 # enemy tank hit tank
-                enemytank.hitourtank()
+                enemytanks.hitourtank()
                 # enemy tank shot
-                enemyammo = enemytank.shot()
+                enemyammo = enemytanks.shot()
                 if enemyammo:
                     # enemy tank ammo
                     MainGame.enemy_ammo_list.append(enemyammo)
             else:
                 MainGame.enemytank_list.remove(enemytank)
-    # create our tank
+    # our tank ammo
     def showammo(self):
-        for bullet in MainGame.ammo_list:
-            if bullet.live == True:
-                bullet.displayBullet()
+        for ammo in MainGame.ammo_list:
+            if ammo.live == True:
+                ammo.showammo()
                 # ammo move
-                bullet.bulletMove()
+                ammo.ammomove()
                 # our ammo hit
-                bullet.hitEnemyTank()
+                ammo.hitenemytank()
                 # oure ammo hit tank
-                bullet.hitWalls()
+                ammo.hitsteel()
             else:
-                MainGame.ammo_list.remove(bullet)
+                MainGame.ammo_list.remove(ammo)
 
     # enemy tank ammo
     def showenemyammo(self):
@@ -188,11 +190,11 @@ class MainGame():
         # end the game
         exit()
     def showexplodes(self):
-        for explode in MainGame.Explode_list:
-            if explode.live:
-                explode.displayExplode()
+        for explodes in MainGame.explode_list:
+            if explodes.live:
+                explodes.showexpolde()
             else:
-                MainGame.Explode_list.remove(explode)
+                MainGame.explode_list.remove(explodes)
 
 class basicitem(pygame.sprite.Sprite):
     def __init__(self):
@@ -218,6 +220,7 @@ class tank(basicitem):
         # record the old coordinates before moving
         self.oldLeft = self.rect.left
         self.oldTop = self.rect.top
+
     def move(self):
         self.oldLeft = self.rect.left
         self.oldTop = self.rect.top
@@ -234,22 +237,21 @@ class tank(basicitem):
             if self.rect.top+self.rect.height < MainGame.SCREEN_HEIGHT:
                 self.rect.top = self.rect.top + self.speed
         # make tank stay in original place
-        def stay(self):
-            self.rect.left = self.oldLeft
-            self.rect.top = self.oldTop
-        def hitsteel(self):
-            for steelwall in MainGame.steel_list:
-                if pygame.sprite.collide_rect(steelwall, self):
-                    self.live = False
-                    steel.hp -= 1
-                    if steel.hp <= 0:
-                        steel.live = False
+    def stay(self):
+        self.rect.left = self.oldLeft
+        self.rect.top = self.oldTop
+    def hitsteel(self):
+        for steelwall in MainGame.steel_list:
+            if pygame.sprite.collide_rect(steelwall, self):
+                self.stay()
+
 
     def displayTank(self):
         # reset tank's image
         self.picture = self.pictures[self.direction]
         # show tank on window
         MainGame.window.blit(self.picture, self.rect)
+
     def display(self):
         self.picture = self.pictures[self.direction]
         MainGame.window.blit(self.picture,self.rect)
@@ -257,13 +259,13 @@ class tank(basicitem):
 
 
 class enemytank(tank):
-  def __init__(self,left,top,speed):
+  def __init__(self, left, top, speed):
       super(enemytank, self).__init__(left, top)
       self.pictures = {
-      "U" : pygame.image.load('img/enemyU.jpg'),
-      "D": pygame.image.load('img/enemyD.jpg'),
-      "L": pygame.image.load('img/enemyL.jpg'),
-      "R": pygame.image.load('img/enemyR.jpg'),
+        "U" : pygame.image.load('img/enemyU.jpg'),
+        "D": pygame.image.load('img/enemyD.jpg'),
+        "L": pygame.image.load('img/enemyL.jpg'),
+        "R": pygame.image.load('img/enemyR.jpg'),
       }
       self.direction = self.randomdirection()
       self.picture = self.pictures[self.direction]
@@ -273,6 +275,7 @@ class enemytank(tank):
       self.speed = speed
       self.stop = True
       self.step = 5
+
   def randomdirection(self):
     number = random.randint(1,4)
     if number == 1:
@@ -283,8 +286,10 @@ class enemytank(tank):
       return 'L'
     elif number ==4:
       return 'R'
+
   def displayenemytank(self):
     super().displaytank()
+
   def randommove(self):
         if self.step <= 0:
             self.direction = self.randomdirection()
@@ -293,45 +298,27 @@ class enemytank(tank):
             self.move()
             self.step -= 1
 
-  def hitsteel(self):
-      for steelwall in MainGame.steel_list:
-          if pygame.sprite.collide_rect(steelwall, self):
-              self.live = False
-              steel.hp -= 1
-              if steel.hp <= 0:
-                  steel.live = False
-
   def hitourtank(self):
-      if pygame.sprite.collide_rect(self, MainGame.TANK_P1):
-          explode = explode(MainGame.TANK_P1)
-          MainGame.Explode_list.append(explode)
-          self.live = False
-          MainGame.TANK_P1.live = False
+      if MainGame.TANK_P1 and MainGame.TANK_P1.live:
+          if pygame.sprite.collide_rect(self, MainGame.TANK_P1):
+              self.stay()
 
   def shot(self):
-      return ammo(self)
+      num = random.randint(1, 1000)
+      if num <= 20:
+          return ammo(self)
 
 class ourtank(tank):
   def __init__(self,left,top):
     super(ourtank,self).__init__(left,top)
-    def hitEnemyTank(self):
-        for eTank in MainGame.enemytank_list:
-            if pygame.sprite.collide_rect(eTank, self):
-                self.stay()
-  def hitsteel(self):
-    for steelwall in MainGame.steel_list:
-      if pygame.sprite.collide_rect(steelwall,self):
-        self.live = False
-        steelwall.hp -= 1
-        if steelwall.hp <= 0:
-          steelwall.live = False
+
   def hitenemytank(self):
-    for enemytank in MainGame.enemytank_list:
-      if pygame.sprite.collide_rect(enemytank,self):
-        explode = explode(enemytank)
-        MainGame.Expolde_list.append(explode)
-        self.live = False
-        enemytank.live = False
+        for enemytank in MainGame.enemytank_list:
+            if pygame.sprite.collide_rect(enemytank, self):
+                self.stay()
+
+
+
 class ammo():
   def __init__(self,tank):
     self.live = True
@@ -381,15 +368,10 @@ class ammo():
         MainGame.Expolde_list.append(explode)
         self.live = False
         enemytank.live = False
-    def hitourtank(self):
-      if pygame.sprite.collide_rect(self,MainGame.TANK_P1):
-        explode = explode(MainGame.TANK_P1)
-        MainGame.Explode_list.append(explode)
-        self.live = False
-        MainGame.TANK_P1.live = False
+
   def hitsteel(self):
     for steelwall in MainGame.steel_list:
-      if pygame.sprite.collide_rect(steelwall,self):
+      if pygame.sprite.collide_rect(steelwall, self):
         self.live = False
         steelwall.hp -= 1
         if steelwall.hp <= 0:
@@ -397,14 +379,14 @@ class ammo():
 
   def hitourtank(self):
       if pygame.sprite.collide_rect(self, MainGame.TANK_P1):
-          explode = explode(MainGame.TANK_P1)
-          MainGame.Explode_list.append(explode)
+          explodes = explode(MainGame.TANK_P1)
+          MainGame.explode_list.append(explodes)
           self.live = False
           MainGame.TANK_P1.live = False
 
 
 class explode():
-  def __init__(self,tank):
+  def __init__(self, tank):
     self.rect = tank.rect
     self.step = 0
     self.pictures = [
@@ -413,9 +395,9 @@ class explode():
     self.picture = self.pictures[self.step]
     self.live = True
     
-  def displayexplode(self):
+  def showexplode(self):
     if self.step < len(self.pictures):
-      MainGame.window.blit(self.picture,self.rect)
+      MainGame.window.blit(self.picture, self.rect)
       self.picture = self.pictures[self.step]
       self.step += 1
     else:
@@ -423,7 +405,7 @@ class explode():
       self.step = 0
 
 class steel():
-  def __init__(self,left,top):
+  def __init__(self, left, top):
     self.picture = pygame.image.load('img/steels.jpg')
     self.rect = self.picture.get_rect()
     self.rect.left = left
@@ -431,7 +413,7 @@ class steel():
     self.live = True
     self.hp = 3
   def displaysteel(self):
-    MainGame.window.blit(self.picture,self.rect)
+    MainGame.window.blit(self.picture, self.rect)
 
 
 
