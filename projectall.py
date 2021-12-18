@@ -10,8 +10,8 @@ color_text = pygame.Color(255, 0, 0)
 class MainGame():
     # create the window of the game
     window = None
-    SCREEN_WIDTH = 1600
-    SCREEN_HEIGHT = 900
+    SCREEN_WIDTH = 1300
+    SCREEN_HEIGHT = 600
     # create our tank
     TANK_P1 = None
     # TANK_P1.stop = True
@@ -42,7 +42,7 @@ class MainGame():
             pygame.display.update()
             MainGame.window.fill(color_display)
 
-            MainGame.window.blit(self.Text2("user manual"), (1400, 5))
+            MainGame.window.blit(self.Text2("user manual"), (1000, 5))
             self.getevent()
             MainGame.window.blit(self.Text1("left 5 enermy tank"), (5, 5))
             # to display our tank when it alive
@@ -192,7 +192,7 @@ class MainGame():
     def showexplodes(self):
         for explodes in MainGame.explode_list:
             if explodes.live:
-                explodes.showexpolde()
+                explodes.showexplodes()
             else:
                 MainGame.explode_list.remove(explodes)
 
@@ -376,6 +376,7 @@ class ammo():
         steelwall.hp -= 1
         if steelwall.hp <= 0:
           steelwall.live = False
+    return
 
   def hitourtank(self):
       if pygame.sprite.collide_rect(self, MainGame.TANK_P1):
@@ -395,7 +396,7 @@ class explode():
     self.picture = self.pictures[self.step]
     self.live = True
     
-  def showexplode(self):
+  def showexplodes(self):
     if self.step < len(self.pictures):
       MainGame.window.blit(self.picture, self.rect)
       self.picture = self.pictures[self.step]
