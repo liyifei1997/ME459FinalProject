@@ -33,7 +33,7 @@ class MainGame():
     def startgame(self):
         pygame.display.init()
         MainGame.window = pygame.display.set_mode([MainGame.SCREEN_WIDTH, MainGame.SCREEN_HEIGHT])
-        pygame.display.set_caption("bettle tank")
+        pygame.display.set_caption("Let's go badger!")
         self.enemytank()
         self.ourtank()
         self.createsteel()
@@ -267,38 +267,38 @@ class tank(basicitem):
         return ammo(self)
 
 class enemytank(tank):
-  def __init__(self, left, top, speed):
-      super(enemytank, self).__init__(left, top)
-      self.pictures = {
+    def __init__(self, left, top, speed):
+        super(enemytank, self).__init__(left, top)
+        self.pictures = {
         "U" : pygame.image.load('img/enemyU.jpg'),
         "D": pygame.image.load('img/enemyD.jpg'),
         "L": pygame.image.load('img/enemyL.jpg'),
         "R": pygame.image.load('img/enemyR.jpg'),
-      }
-      self.direction = self.randomdirection()
-      self.picture = self.pictures[self.direction]
-      self.rect = self.picture.get_rect()
-      self.rect.left = left
-      self.rect.top = top
-      self.speed = speed
-      self.stop = True
-      self.step = 5
+        }
+        self.direction = self.randomdirection()
+        self.picture = self.pictures[self.direction]
+        self.rect = self.picture.get_rect()
+        self.rect.left = left
+        self.rect.top = top
+        self.speed = speed
+        self.stop = True
+        self.step = 5
 
-  def randomdirection(self):
-    number = random.randint(1,4)
-    if number == 1:
-      return  'U'
-    elif number ==2:
-      return  'D'
-    elif number ==3:
-      return 'L'
-    elif number ==4:
-      return 'R'
+    def randomdirection(self):
+        number = random.randint(1,4)
+        if number == 1:
+            return  'U'
+        elif number ==2:
+            return  'D'
+        elif number ==3:
+            return 'L'
+        elif number ==4:
+            return 'R'
 
-  def displayenemytank(self):
-    super().displaytank()
+    def displayenemytank(self):
+        super().displaytank()
 
-  def randommove(self):
+    def randommove(self):
         if self.step <= 0:
             self.direction = self.randomdirection()
             self.step = 20
@@ -306,21 +306,21 @@ class enemytank(tank):
             self.move()
             self.step -= 1
 
-  def hitourtank(self):
-      if MainGame.TANK_P1 and MainGame.TANK_P1.live:
-          if pygame.sprite.collide_rect(self, MainGame.TANK_P1):
-              self.stay()
+    def hitourtank(self):
+        if MainGame.TANK_P1 and MainGame.TANK_P1.live:
+            if pygame.sprite.collide_rect(self, MainGame.TANK_P1):
+                self.stay()
 
-  def shot(self):
-      num = random.randint(1, 1000)
-      if num <= 20:
-          return ammo(self)
+    def shot(self):
+        num = random.randint(1, 1000)
+        if num <= 20:
+            return ammo(self)
 
 class ourtank(tank):
-  def __init__(self,left,top):
-    super(ourtank,self).__init__(left,top)
+    def __init__(self,left,top):
+        super(ourtank,self).__init__(left,top)
 
-  def hitenemytank(self):
+    def hitenemytank(self):
         for enemytank in MainGame.enemytank_list:
             if pygame.sprite.collide_rect(enemytank, self):
                 self.stay()
@@ -328,101 +328,101 @@ class ourtank(tank):
 
 
 class ammo():
-  def __init__(self,tank):
-    self.live = True
-    self.picture = pygame.image.load('img/ammo.gif')
-    self.direction = tank.direction
-    self.rect = self.picture.get_rect()
-    if self.direction == 'U':
-      self.rect.left = tank.rect.left + tank.rect.width/2 - self.rect.width/2
-      self.rect.top = tank.rect.top - self.rect.top
-    elif self.direction == 'D':
-      self.rect.left = tank.rect.left + tank.rect.width/2 - self.rect.width/2
-      self.rect.top = tank.rect.top + tank.rect.height
-    elif self.direction == 'L':
-      self.rect.left = tank.rect.left - self.rect.width/2 - self.rect.width/2
-      self.rect.top = tank.rect.top + tank.rect.width/2 - self.rect.width/2
-    elif self.direction == 'R':
-      self.rect.left = tank.rect.left + tank.rect.width
-      self.rect.top = tank.rect.top + tank.rect.width/2 - self.rect.width/2
-    self.speed = 8
-  def ammomove(self):
-    if self.direction == 'U':
-      if self.rect.top > 0:
-        self.rect.top -= self.speed
-      else:
-        self.live = False
-    elif self.direction == 'D':
-      if self.rect.top < MainGame.SCREEN_HEIGHT - self.rect.height:
-        self.rect.top += self.speed
-      else:
-        self.live = False
-    elif self.direction == 'L':
-      if self.rect.left > 0:
-        self.rect.left -= self.speed
-      else:
-        self.live = False
-    elif self.direction == 'R':
-      if self.rect.left < MainGame.SCREEN_WIDTH - self.rect.width:
-        self.rect.left += self.speed
-      else:
-        self.live = False
-  def displayammo(self):
-    MainGame.window.blit(self.picture, self.rect)
-  def hitenemytank(self):
-    for enemytank in MainGame.enemytank_list:
-      if pygame.sprite.collide_rect(enemytank,self):
-        explode = explode(enemytank)
-        MainGame.expolde_list.append(explode)
-        self.live = False
-        enemytank.live = False
+    def __init__(self,tank):
+        self.live = True
+        self.picture = pygame.image.load('img/ammo.gif')
+        self.direction = tank.direction
+        self.rect = self.picture.get_rect()
+        if self.direction == 'U':
+            self.rect.left = tank.rect.left + tank.rect.width/2 - self.rect.width/2
+            self.rect.top = tank.rect.top - self.rect.top
+        elif self.direction == 'D':
+            self.rect.left = tank.rect.left + tank.rect.width/2 - self.rect.width/2
+            self.rect.top = tank.rect.top + tank.rect.height
+        elif self.direction == 'L':
+            self.rect.left = tank.rect.left - self.rect.width/2 - self.rect.width/2
+            self.rect.top = tank.rect.top + tank.rect.width/2 - self.rect.width/2
+        elif self.direction == 'R':
+            self.rect.left = tank.rect.left + tank.rect.width
+            self.rect.top = tank.rect.top + tank.rect.width/2 - self.rect.width/2
+         self.speed = 8
+    def ammomove(self):
+        if self.direction == 'U':
+            if self.rect.top > 0:
+                self.rect.top -= self.speed
+            else:
+                self.live = False
+        elif self.direction == 'D':
+            if self.rect.top < MainGame.SCREEN_HEIGHT - self.rect.height:
+                self.rect.top += self.speed
+            else:
+                self.live = False
+        elif self.direction == 'L':
+            if self.rect.left > 0:
+                self.rect.left -= self.speed
+            else:
+                self.live = False
+        elif self.direction == 'R':
+            if self.rect.left < MainGame.SCREEN_WIDTH - self.rect.width:
+                self.rect.left += self.speed
+            else:
+                self.live = False
+    def displayammo(self):
+        MainGame.window.blit(self.picture, self.rect)
+    def hitenemytank(self):
+        for enemytank in MainGame.enemytank_list:
+            if pygame.sprite.collide_rect(enemytank,self):
+                explode = explode(enemytank)
+                MainGame.expolde_list.append(explode)
+                self.live = False
+                enemytank.live = False
 
-  def hitsteel(self):
-    for steelwall in MainGame.steel_list:
-      if pygame.sprite.collide_rect(steelwall, self):
-        self.live = False
-        steelwall.hp -= 1
-        if steelwall.hp <= 0:
-          steelwall.live = False
-    return
+    def hitsteel(self):
+        for steelwall in MainGame.steel_list:
+            if pygame.sprite.collide_rect(steelwall, self):
+                self.live = False
+                steelwall.hp -= 1
+            if steelwall.hp <= 0:
+                steelwall.live = False
+            return
 
-  def hitourtank(self):
-      if pygame.sprite.collide_rect(self, MainGame.TANK_P1):
-          explodes = explode(MainGame.TANK_P1)
-          MainGame.explode_list.append(explodes)
-          self.live = False
-          MainGame.TANK_P1.live = False
+    def hitourtank(self):
+        if pygame.sprite.collide_rect(self, MainGame.TANK_P1):
+            explodes = explode(MainGame.TANK_P1)
+            MainGame.explode_list.append(explodes)
+            self.live = False
+            MainGame.TANK_P1.live = False
 
 
 class explode():
-  def __init__(self, tank):
-    self.rect = tank.rect
-    self.step = 0
-    self.pictures = [
-      pygame.image.load('img/explode.gif')
-    ]
-    self.picture = self.pictures[self.step]
-    self.live = True
+    def __init__(self, tank):
+        self.rect = tank.rect
+        self.step = 0
+        self.pictures = [
+        pygame.image.load('img/explode.gif')
+        ]
+        self.picture = self.pictures[self.step]
+        self.live = True
     
-  def showexplodes(self):
-    if self.step < len(self.pictures):
-      MainGame.window.blit(self.picture, self.rect)
-      self.picture = self.pictures[self.step]
-      self.step += 1
-    else:
-      self.live = False
-      self.step = 0
+    def showexplodes(self):
+        if self.step < len(self.pictures):
+            MainGame.window.blit(self.picture, self.rect)
+            self.picture = self.pictures[self.step]
+            self.step += 1
+        else:
+            self.live = False
+            self.step = 0
 
 class steel():
-  def __init__(self, left, top):
-    self.picture = pygame.image.load('img/steels.jpg')
-    self.rect = self.picture.get_rect()
-    self.rect.left = left
-    self.rect.top = top
-    self.live = True
-    self.hp = 3
-  def displaysteel(self):
-    MainGame.window.blit(self.picture, self.rect)
+    def __init__(self, left, top):
+        self.picture = pygame.image.load('img/steels.jpg')
+        self.rect = self.picture.get_rect()
+        self.rect.left = left
+        self.rect.top = top
+        self.live = True
+        self.hp = 3
+    def displaysteel(self):
+        MainGame.window.blit(self.picture, self.rect)
 
 
 
