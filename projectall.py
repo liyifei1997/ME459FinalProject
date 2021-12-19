@@ -121,7 +121,7 @@ class MainGame():
 
     def ourtank(self):
         # create our tank
-        MainGame.TANK_P1 = ourtank(400, 300)
+        MainGame.TANK_P1 = ourtank(600, 300)
 
 
     def enemytank(self):
@@ -132,11 +132,16 @@ class MainGame():
             left = random.randint(1, 7)
             enemytanks = enemytank(left * 100, top, speed)
             MainGame.enemytank_list.append(enemytanks)
-    # create steel
+    # create random steel
     def createsteel(self):
-        for i in range(1, 7):
-            steelwall = steel(120 * i, 240)
-            MainGame.steel_list.append(steelwall)
+        for i in range(1, 10):
+            for k in range(1, 25):
+                j = random.randint(1,10)
+                steelwall = steel(125 * i, 250)
+                steelwall2 = steel(125 * j, 125 * k)
+                MainGame.steel_list.append(steelwall)
+                MainGame.steel_list.append(steelwall2)
+
     # create steelwall
     def showsteel(self):
         for steelwall in MainGame.steel_list:
