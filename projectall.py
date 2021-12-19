@@ -345,7 +345,7 @@ class ammo():
         elif self.direction == 'R':
             self.rect.left = tank.rect.left + tank.rect.width
             self.rect.top = tank.rect.top + tank.rect.width/2 - self.rect.width/2
-         self.speed = 8
+        self.speed = 8
     def ammomove(self):
         if self.direction == 'U':
             if self.rect.top > 0:
@@ -372,8 +372,8 @@ class ammo():
     def hitenemytank(self):
         for enemytank in MainGame.enemytank_list:
             if pygame.sprite.collide_rect(enemytank,self):
-                explode = explode(enemytank)
-                MainGame.expolde_list.append(explode)
+                explodes = explode(enemytank)
+                MainGame.explode_list.append(explodes)
                 self.live = False
                 enemytank.live = False
 
@@ -382,9 +382,9 @@ class ammo():
             if pygame.sprite.collide_rect(steelwall, self):
                 self.live = False
                 steelwall.hp -= 1
-            if steelwall.hp <= 0:
-                steelwall.live = False
-            return
+                if steelwall.hp <= 0:
+                    steelwall.live = False
+                return
 
     def hitourtank(self):
         if pygame.sprite.collide_rect(self, MainGame.TANK_P1):
@@ -399,11 +399,11 @@ class explode():
         self.rect = tank.rect
         self.step = 0
         self.pictures = [
-        pygame.image.load('img/explode.gif')
+            pygame.image.load('img/explode.gif')
         ]
         self.picture = self.pictures[self.step]
         self.live = True
-    
+
     def showexplodes(self):
         if self.step < len(self.pictures):
             MainGame.window.blit(self.picture, self.rect)
