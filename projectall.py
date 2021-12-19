@@ -95,9 +95,14 @@ class MainGame():
                     print("go down")
                     MainGame.TANK_P1.direction = 'D'
                     MainGame.TANK_P1.stop = False
-
+ 
                 elif event.key == pygame.K_SPACE:
-                    pass
+                    print('Badger Attack')
+                    if len(MainGame.ammo_list) < 3:
+                        m = ammo(MainGame.TANK_P1)
+                        MainGame.ammo_list.append(m)
+                    else:
+                        print("Cool down")
             if event.type == pygame.KEYUP and event.key == pygame.K_LEFT or pygame.K_RIGHT or pygame.K_DOWN or  pygame.K_DOWN:
                 MainGame.TANK_P1.stop = True
     def Text1(self, word):
@@ -216,7 +221,7 @@ class tank(basicitem):
         self.speed = 5
         self.step = 20
         self.live = True
-        self.stop =True
+        self.stop = False
         # record the old coordinates before moving
         self.oldLeft = self.rect.left
         self.oldTop = self.rect.top
@@ -225,13 +230,13 @@ class tank(basicitem):
         self.oldLeft = self.rect.left
         self.oldTop = self.rect.top
         if self.direction == 'L':
-            if self.rect.left>0:
+            if self.rect.left > 0:
                 self.rect.left = self.rect.left - self.speed
         elif self.direction == 'R':
-            if self.rect.left+self.rect.height< MainGame.SCREEN_WIDTH:
+            if self.rect.left+self.rect.height < MainGame.SCREEN_WIDTH:
                 self.rect.left = self.rect.left + self.speed
         elif self.direction == 'U':
-            if self.rect.top>0:
+            if self.rect.top > 0:
                 self.rect.top = self.rect.top - self.speed
         elif self.direction == 'D':
             if self.rect.top+self.rect.height < MainGame.SCREEN_HEIGHT:
@@ -252,11 +257,9 @@ class tank(basicitem):
         # show tank on window
         MainGame.window.blit(self.picture, self.rect)
 
-    def display(self):
-        self.picture = self.pictures[self.direction]
-        MainGame.window.blit(self.picture,self.rect)
 
-
+    def shot(self):
+        return ammo(self)
 
 class enemytank(tank):
   def __init__(self, left, top, speed):
