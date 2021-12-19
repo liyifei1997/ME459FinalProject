@@ -58,9 +58,9 @@ class MainGame():
             if MainGame.TANK_P1 and not MainGame.TANK_P1 == True:
                 MainGame.TANK_P1.move()
             # when tanks hit wall
-            MainGame.TANK_P1.hitsteel()
+                MainGame.TANK_P1.hitsteel()
             # when tank hits tank
-            MainGame.TANK_P1.hitenemytank()
+                MainGame.TANK_P1.hitenemytank()
             # show wall
             self.showsteel()
             # use our tank bullet list
