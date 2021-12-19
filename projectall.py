@@ -166,7 +166,7 @@ class MainGame():
                     # enemy tank ammo
                     MainGame.enemy_ammo_list.append(enemyammo)
             else:
-                MainGame.enemytank_list.remove(enemytank)
+                MainGame.enemytank_list.remove(enemytanks)
     # our tank ammo
     def showammo(self):
         for ammo in MainGame.ammo_list:
