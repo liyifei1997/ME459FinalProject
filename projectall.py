@@ -95,7 +95,7 @@ class MainGame():
                     print("go down")
                     MainGame.TANK_P1.direction = 'D'
                     MainGame.TANK_P1.stop = False
- 
+
                 elif event.key == pygame.K_SPACE:
                     print('Badger Attack')
                     if len(MainGame.ammo_list) < 3:
@@ -166,12 +166,12 @@ class MainGame():
     def showammo(self):
         for ammo in MainGame.ammo_list:
             if ammo.live == True:
-                ammo.showammo()
+                ammo.displayammo()
                 # ammo move
                 ammo.ammomove()
                 # our ammo hit
                 ammo.hitenemytank()
-                # oure ammo hit tank
+                # our ammo hit tank
                 ammo.hitsteel()
             else:
                 MainGame.ammo_list.remove(ammo)
@@ -363,12 +363,12 @@ class ammo():
       else:
         self.live = False
   def displayammo(self):
-    MainGame.window.blit(self.picture,self.rect)
+    MainGame.window.blit(self.picture, self.rect)
   def hitenemytank(self):
-    for enemytank in MainGame.EnemyTank_list:
+    for enemytank in MainGame.enemytank_list:
       if pygame.sprite.collide_rect(enemytank,self):
         explode = explode(enemytank)
-        MainGame.Expolde_list.append(explode)
+        MainGame.expolde_list.append(explode)
         self.live = False
         enemytank.live = False
 
