@@ -28,8 +28,6 @@ class MainGame():
     explode_list = []
     # list of wall
     steel_list = []
-
-
     def startgame(self):
         pygame.display.init()
         MainGame.window = pygame.display.set_mode([MainGame.SCREEN_WIDTH, MainGame.SCREEN_HEIGHT])
@@ -42,9 +40,13 @@ class MainGame():
             pygame.display.update()
             MainGame.window.fill(color_display)
 
-            MainGame.window.blit(self.Text2("user manual"), (1000, 5))
+            MainGame.window.blit(self.Text1("user manual"), (900, 5))
+            MainGame.window.blit(self.Text1("press up down left right to control badger"), (900, 30))
+            MainGame.window.blit(self.Text1("press space to fire"), (900, 50))
+            MainGame.window.blit(self.Text1("press esc to revive after death"), (900, 70))
+            MainGame.window.blit(self.Text1("do not press other key after your death"), (900, 90))
             self.getevent()
-            MainGame.window.blit(self.Text1("left 5 enermy tank"), (5, 5))
+            MainGame.window.blit(self.Text1("left %d enemy tank" % len(MainGame.enemytank_list)), (5, 5))
             # to display our tank when it alive
             if MainGame.TANK_P1 and MainGame.TANK_P1.live:
                 MainGame.TANK_P1.displayTank()
@@ -55,12 +57,13 @@ class MainGame():
             # add enemy tanks
             self.showenemytank()
             # move out tank
-            if MainGame.TANK_P1 and not MainGame.TANK_P1 == True:
-                MainGame.TANK_P1.move()
+            if MainGame.TANK_P1:
+                if  MainGame.TANK_P1.stop == True :
+                    MainGame.TANK_P1.move()
             # when tanks hit wall
-                MainGame.TANK_P1.hitsteel()
+                    MainGame.TANK_P1.hitsteel()
             # when tank hits tank
-                MainGame.TANK_P1.hitenemytank()
+                    MainGame.TANK_P1.hitenemytank()
             # show wall
             self.showsteel()
             # use our tank bullet list
@@ -81,20 +84,20 @@ class MainGame():
                 if event.key == pygame.K_LEFT:
                     print("go left")
                     MainGame.TANK_P1.direction = 'L'
-                    MainGame.TANK_P1.stop = False
+                    MainGame.TANK_P1.stop = True
                 elif event.key == pygame.K_RIGHT:
                     print("go right")
                     MainGame.TANK_P1.direction = 'R'
-                    MainGame.TANK_P1.stop = False
+                    MainGame.TANK_P1.stop = True
                 elif event.key == pygame.K_UP:
                     print("go up")
                     MainGame.TANK_P1.direction = 'U'
-                    MainGame.TANK_P1.stop = False
+                    MainGame.TANK_P1.stop = True
 
                 elif event.key == pygame.K_DOWN:
                     print("go down")
                     MainGame.TANK_P1.direction = 'D'
-                    MainGame.TANK_P1.stop = False
+                    MainGame.TANK_P1.stop = True
 
                 elif event.key == pygame.K_SPACE:
                     print('Badger Attack')
@@ -103,8 +106,12 @@ class MainGame():
                         MainGame.ammo_list.append(m)
                     else:
                         print("Cool down")
-            if event.type == pygame.KEYUP and event.key == pygame.K_LEFT or pygame.K_RIGHT or pygame.K_DOWN or  pygame.K_DOWN:
-                MainGame.TANK_P1.stop = True
+                if event.key == pygame.K_ESCAPE:
+                    self.ourtank()
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_LEFT or event.key ==  pygame.K_RIGHT or event.key == pygame.K_DOWN or  event.key==pygame.K_UP:
+                    if MainGame.TANK_P1 and MainGame.TANK_P1.live:
+                        MainGame.TANK_P1.stop = True
     def Text1(self, word):
         pygame.font.init()
         # textlist = pygame.font.get_fonts()
@@ -112,12 +119,6 @@ class MainGame():
         textsurf1 = text.render(word, True, color_text)
         return textsurf1
 
-    def Text2(self, word):
-        pygame.font.init()
-        # textlist = pygame.font.get_fonts()
-        text = pygame.font.SysFont('arial', 20)
-        textsurf2 = text.render(word, True, color_text)
-        return textsurf2
 
     def ourtank(self):
         # create our tank
@@ -212,6 +213,7 @@ class basicitem(pygame.sprite.Sprite):
 
 class tank(basicitem):
     def __init__(self, left, top):  # Our tank coordinates
+        super().__init__()
         self.direction = 'U'  # Up Down Left Right
         self.pictures = {  # load pictures
             'U': pygame.image.load('img/ourU.jpg'),
@@ -223,7 +225,7 @@ class tank(basicitem):
         self.rect = self.picture.get_rect()
         self.rect.left = left
         self.rect.top = top
-        self.speed = 5
+        self.speed = 3
         self.step = 20
         self.live = True
         self.stop = False
@@ -295,8 +297,8 @@ class enemytank(tank):
         elif number ==4:
             return 'R'
 
-    def displayenemytank(self):
-        super().displaytank()
+    def showenemytank(self):
+        super().displayTank()
 
     def randommove(self):
         if self.step <= 0:
