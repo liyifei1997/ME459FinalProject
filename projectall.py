@@ -41,9 +41,9 @@ class MainGame():
             MainGame.window.fill(color_display)
 
             MainGame.window.blit(self.Text1("user manual"), (900, 5))
-            MainGame.window.blit(self.Text1("press up down left right to control badger"), (900, 30))
-            MainGame.window.blit(self.Text1("press space to fire"), (900, 50))
-            MainGame.window.blit(self.Text1("press esc to revive after death"), (900, 70))
+            MainGame.window.blit(self.Text1("press 'up' 'down' 'left' 'right' to control badger"), (900, 30))
+            MainGame.window.blit(self.Text1("press 'space' to fire"), (900, 50))
+            MainGame.window.blit(self.Text1("press 'esc' to revive after death"), (900, 70))
             MainGame.window.blit(self.Text1("do not press other key after your death"), (900, 90))
             self.getevent()
             MainGame.window.blit(self.Text1("left %d enemy tank" % len(MainGame.enemytank_list)), (5, 5))
@@ -126,7 +126,7 @@ class MainGame():
 
 
     def enemytank(self):
-        top = 100
+        top = 80
         for i in range(MainGame.enemytank_count):
             # tank move speed
             speed = random.randint(3, 6)
